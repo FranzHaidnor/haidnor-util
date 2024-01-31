@@ -67,52 +67,48 @@ public class Downloader {
      *
      * @param httpURL 网络资源 URL
      * @param path    文件保存地址
-     * 下载成功返回 true, 下载失败返回 false
+     *                下载成功返回 true, 下载失败返回 false
      */
     public void save(String httpURL, String path) {
-//        try {
-//            URLConnection connection;
-//            if (proxyHostname != null & proxyPort != null) {
-//                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
-//                connection = new URL(httpURL).openConnection(proxy);
-//            } else {
-//                connection = new URL(httpURL).openConnection();
-//            }
-//            InputStream inputStream = null;
-//            FileOutputStream fileOutputStream = null;
-//            try {
-//                inputStream = connection.getInputStream();
-//
-//                String filePath = path.substring(0, FileUtil.lastIndexOfSeparator(path));
-//                if (!FileUtil.exist(filePath)) {
-//                    FileUtil.mkdir(filePath);
-//                }
-//                fileOutputStream = new FileOutputStream(path);
-//
-//                byte[] buffer = new byte[1024];
-//                int length;
-//                while ((length = inputStream.read(buffer)) > 0) {
-//                    fileOutputStream.write(buffer, 0, length);
-//                    // 下载速度限制器
-//                    if (speedLimiter != null) {
-//                        speedLimiter.braking(length);
-//                    }
-//                    // 下载速度监视器
-//                    if (speedMonitor != null) {
-//                        speedMonitor.addByte(length);
-//                    }
-//                }
-//            } finally {
-//                if (inputStream != null) {
-//                    inputStream.close();
-//                }
-//                if (fileOutputStream != null) {
-//                    fileOutputStream.close();
-//                }
-//            }
-//        } catch (Exception exception) {
-//            throw new RuntimeException(exception);
-//        }
+        try {
+            URLConnection connection;
+            if (proxyHostname != null & proxyPort != null) {
+                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
+                connection = new URL(httpURL).openConnection(proxy);
+            } else {
+                connection = new URL(httpURL).openConnection();
+            }
+            InputStream inputStream = null;
+            FileOutputStream fileOutputStream = null;
+            try {
+                inputStream = connection.getInputStream();
+
+                fileOutputStream = new FileOutputStream(path);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    fileOutputStream.write(buffer, 0, length);
+                    // 下载速度限制器
+                    if (speedLimiter != null) {
+                        speedLimiter.braking(length);
+                    }
+                    // 下载速度监视器
+                    if (speedMonitor != null) {
+                        speedMonitor.addByte(length);
+                    }
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            }
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
 }
