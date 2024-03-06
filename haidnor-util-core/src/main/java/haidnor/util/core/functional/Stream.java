@@ -3,6 +3,8 @@ package haidnor.util.core.functional;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -158,6 +160,32 @@ public class Stream {
      */
     public static <T> List<T> sorted(Collection<T> collection, Comparator<? super T> comparator) {
         return collection.stream().sorted(comparator).collect(Collectors.toList());
+    }
+
+    /**
+     * 求和
+     *
+     * @param collection 数据集合
+     * @param mapper     a <a href="package-summary.html#NonInterference">non-interfering</a>,
+     *                   <a href="package-summary.html#Statelessness">stateless</a>
+     *                   function to apply to each element
+     * @return the sum of elements in this stream
+     */
+    public static <T> long sum(Collection<T> collection, ToLongFunction<? super T> mapper) {
+        return collection.stream().mapToLong(mapper).sum();
+    }
+
+    /**
+     * 求和
+     *
+     * @param collection 数据集合
+     * @param mapper     a <a href="package-summary.html#NonInterference">non-interfering</a>,
+     *                   <a href="package-summary.html#Statelessness">stateless</a>
+     *                   function to apply to each element
+     * @return the sum of elements in this stream
+     */
+    public static <T> int sum(Collection<T> collection, ToIntFunction<? super T> mapper) {
+        return collection.stream().mapToInt(mapper).sum();
     }
 
 }
